@@ -1,0 +1,12 @@
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Dependencies and build output (if a framework like Hardhat is added later)
+node_modules/
+artifacts/
+cache/
+
+# Secrets: never commit private keys or RPC keys
+.env

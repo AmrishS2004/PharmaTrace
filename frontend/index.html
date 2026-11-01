@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PharmaTrace</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- ethers.js v6 talks to MetaMask and the PharmaTrace contract -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+</head>
+<body>
+  <!--
+    PharmaTrace web interface (draft).
+    Each section below maps to one group of contract functions.
+    Sections are shown or hidden based on the connected wallet's role.
+  -->
+  <header>
+    <h1>PharmaTrace</h1>
+    <p>Pharmaceutical batch provenance on Polygon Amoy</p>
+    <button id="connectBtn">Connect MetaMask</button>
+    <p id="walletInfo">Not connected</p>
+  </header>
+
+  <main>
+    <!-- Anyone (including consumers with no role): verifyBatch + getBatchHistory -->
+    <section id="verifySection">
+      <h2>Verify a batch</h2>
+      <input id="verifyId" placeholder="Batch ID, e.g. PT-2026-0001" />
+      <button id="verifyBtn">Verify</button>
+      <div id="verifyResult"></div>
+      <ol id="historyList"></ol>
+    </section>
+
+    <!-- Admin only: grantRole / revokeRole -->
+    <section id="adminSection" class="role-section" hidden>
+      <h2>Manage roles</h2>
+      <input id="roleAddress" placeholder="Wallet address" />
+      <select id="roleSelect">
+        <option value="1">Manufacturer</option>
+        <option value="2">Distributor</option>
+        <option value="3">Pharmacy</option>
+      </select>
+      <button id="grantBtn">Grant role</button>
+      <button id="revokeBtn">Revoke role</button>
+    </section>
+
+    <!-- Manufacturer: registerBatch / recallBatch -->
+    <section id="manufacturerSection" class="role-section" hidden>
+      <h2>Register a batch</h2>
+      <input id="regId" placeholder="Batch ID" />
+      <input id="regDrug" placeholder="Drug name" />
+      <label>Manufacture date <input id="regMfgDate" type="date" /></label>
+      <label>Expiry date <input id="regExpDate" type="date" /></label>
+      <button id="registerBtn">Register</button>
+
+      <h2>Recall a batch</h2>
+      <input id="recallId" placeholder="Batch ID" />
+      <input id="recallReason" placeholder="Reason" />
+      <button id="recallBtn">Recall</button>
+    </section>
+
+    <!-- Manufacturer and Distributor: shipBatch -->
+    <section id="shipSection" class="role-section" hidden>
+      <h2>Ship a batch</h2>
+      <input id="shipId" placeholder="Batch ID" />
+      <input id="shipTo" placeholder="Receiver wallet address" />
+      <input id="shipNote" placeholder="Note (optional), e.g. tracking number" />
+      <button id="shipBtn">Ship</button>
+    </section>
+
+    <!-- Distributor and Pharmacy: receiveBatch -->
+    <section id="receiveSection" class="role-section" hidden>
+      <h2>Confirm delivery</h2>
+      <input id="receiveId" placeholder="Batch ID" />
+      <button id="receiveBtn">Receive</button>
+    </section>
+
+    <!-- Pharmacy: dispenseBatch -->
+    <section id="pharmacySection" class="role-section" hidden>
+      <h2>Dispense a batch</h2>
+      <input id="dispenseId" placeholder="Batch ID" />
+      <button id="dispenseBtn">Dispense</button>
+    </section>
+
+    <p id="txStatus"></p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
